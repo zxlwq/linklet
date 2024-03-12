@@ -2,20 +2,17 @@
 
 一个使用 Cloudflare Pages 创建的 URL 缩短器
 
-*Demo* : [https://d.131213.xyz/](https://d.131213.xyz/)
+*演示站点* : [wss.so](https://wss.so), [linklet.pages.dev](https://linklet.pages.dev)
 
+### 1.利用 Cloudflare Pages 部署
 
-
-### 利用Cloudflare pages部署
-
-
-1. fork本项目
-2. 登录到[Cloudflare](https://dash.cloudflare.com/)控制台.
-3. 在帐户主页中，选择`pages`> ` Create a project` > `Connect to Git`
-4. 选择你创建的项目存储库，在`Set up builds and deployments`部分中，全部默认即可。
-5. 点击`Save and Deploy`，稍等片刻，你的网站就部署好了。
-6. 创建D1数据库参考[这里](https://github.com/x-dr/telegraph-Image/blob/main/docs/manage.md)
-7. 执行sql命令创建表（在控制台输入框粘贴下面语句执行即可）
+1. Fork [linklet 仓库](https://github.com/HarrisonWang/linklet.git)。
+2. 登录到 [Cloudflare](https://dash.cloudflare.com) 控制台。
+3. 在 Cloudflare 控制台，选择 <kbd>Workers & Pages</kbd> > <kbd>Create application</kbd> > <kbd>Pages</kbd> > <kbd>Connect to Git</kbd>。
+4. 选择 Fork 的仓库，若没有该仓库，请点击 [Cloudflare Pages 链接](https://github.com/settings/installations/46795069)配置 Cloudflare 访问个人的 GitHub 仓库权限。
+5. 选中 Fork 的仓库，点击<kbd>Begin setup</kbd>完成部署。
+6. 在 Cloudflare 控制台创建 D1 数据库，依次点击 <kbd>Workers & Pages</kbd> > <kbd>D1</kbd> > <kbd>Create database</kbd> > <kbd>Dashboard</kbd>，输入 Database name 点击 <kbd>Create</kbd> 完成数据库的创建。
+7. 点击 <kbd>Console</kbd>，输入以下 SQL 命令创建表：
 
 ```sql
 DROP TABLE IF EXISTS links;
@@ -38,36 +35,45 @@ CREATE TABLE IF NOT EXISTS logs (
   `ip` text ,
   `create_time` DATE
 );
-
-```
-8. 选择部署完成short项目，前往后台依次点击`设置`->`函数`->`D1 数据库绑定`->`编辑绑定`->变量名称填写：`DB` 命名空间 `选择你提前创建好的D1` 数据库绑定
-
-9. 重新部署项目，完成。
-
-
-### API
-
-#### 短链生成
-
-```bash
-# POST /create
-curl -X POST -H "Content-Type: application/json" -d '{"url":"https://131213.xyz"}' https://d.131213.xyz/create
-
-# 指定slug
-curl -X POST -H "Content-Type: application/json" -d '{"url":"https://131213.xyz","slug":"scxs"}' https://d.131213.xyz/create
-
 ```
 
+8. 选择部署完成的 linklet 项目，在 Cloudflare 控制台依次点击<kbd>Settings</kbd> > <kbd>Functions</kbd> > <kbd>Add bindings</kbd>，输入 Variable name 值 **DB** 并选择 D1 Database **linklet**，点击 <kbd>Save</kbd> 保存，设置如下表：
 
+    | Variable name | D1 database |
+    | :------------ | :---------- |
+    | DB            | linklet     |
 
-> response:
+9. 为了生效 D1 数据库配置，需完成项目的重新部署。
+
+### 2.API 方式生成短网址
+
+请求：
+
+```http
+### 生成随机短链接
+POST https://wss.so/create
+Content-Type: application/json
+
+{
+  "url": "https://ollama.com/blog/how-to-prompt-code-llama"
+}
+
+### 生成指定 slug 短链接
+POST https://wss.so/create
+Content-Type: application/json
+
+{
+  "url": "https://ollama.com/blog/how-to-prompt-code-llama",
+  "slug": "llama"
+}
+
+```
+
+响应：
 
 ```json
 {
   "slug": "<slug>",
-  "link": "http://d.131213.xyz/<slug>"
+  "link": "http://wss.so/<slug>"
 }
 ```
-
-
-
