@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" href="asset/img/favicon.png"  >
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>short</title>
+    <title>短链生成器</title>
     <style>
       :root {
         --color-primary: #5c7cfa;
@@ -44,7 +44,7 @@
       }
 
       h1 {
-        font-size: 5rem;
+        font-size: 3rem;
         font-weight: 300;
         text-align: center;
         opacity: .2;
@@ -203,7 +203,7 @@
     </style>
   </head>
   <body>
-    <header><h1>短网址生成器</h1></header>
+    <header><h1>短链生成器</h1></header>
     <main x-data="app" x-cloak>
       <p x-show.transition.opacity="alert" :class="alert?.type" x-text="alert?.message"></p>
       <input placeholder="输入要缩短的网址..." x-model="url" x-ref="url" />
@@ -217,7 +217,7 @@
       <button :class="{ loading }" :disabled="loading || isValidated()" @click="submit($refs, $nextTick)">生成</button>
     </main>
     <footer>
-      基于 <a href="https://github.com/harrisonwang/linklet" target="_blank">Cloudflare Pages</a> 的短链接生成器
+      基于 <a href="https://github.com/harrisonwang/linklet" target="_blank">Cloudflare</a> 的短链生成器
     </footer>
     <script src="asset/js/alpine.js"></script>
     <script>
