@@ -16,7 +16,7 @@
 
         /* 设置背景图片 */
         body {
-            background: url('https://images.zxl.cc.ua/blog/12.webp') no-repeat center center fixed;
+            background: url('asset/img/background.jpg') no-repeat center center fixed;
             background-size: cover;
             font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             line-height: 1.5;
@@ -121,6 +121,14 @@
             isValidated () {
                 return !/^https?:\/\/.{3,}/.test(this.url);
             },
+            async copyToClipboard(text) {
+                try {
+                    await navigator.clipboard.writeText(text);
+                    this.alert = { type: 'success', message: `短链已复制：${text}` };
+                } catch (err) {
+                    this.alert = { type: 'error', message: '复制失败，请手动复制！' };
+                }
+            },
             submit () {
                 if (!this.url) {
                     this.alert = { type: 'error', message: '请输入 URL！' };
@@ -140,7 +148,9 @@
                     if (res.message) {
                         this.alert = { type: 'error', message: res.message };
                     } else {
-                        this.alert = { type: 'success', message: `短链已生成：${res.link}` };
+                        this.url = res.link;
+                        this.alert = { type: 'success', message: `短链生成成功：${res.link}` };
+                        this.copyToClipboard(res.link); // 自动复制到剪贴板
                     }
                 })
                 .catch(err => {
