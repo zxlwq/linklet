@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" href="asset/img/logo.png">
+    <link rel="icon" href="asset/img/logo.png"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>短链生成器</title>
     <style>
@@ -13,7 +13,8 @@
             --body-color: #ffffff;
             --border-color: #dee2e6;
         }
-  /* 设置背景图片 */
+
+        /* 设置背景图片 */
         body {
             background: url('asset/img/favicon.jpg') no-repeat center center fixed;
             background-size: cover;
@@ -32,6 +33,7 @@
             position: relative;
         }
 
+        /* 半透明遮罩层 */
         body::before {
             content: "";
             position: fixed;
@@ -39,7 +41,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.3); /* 30% 透明度 */
             z-index: -1;
         }
 
@@ -71,26 +73,24 @@
         }
 
         button {
-            width: 100%;
-            margin-top: 1rem;
-            padding: .75rem;
-            border: none;
-            border-radius: .5rem;
-            background: #ff69b4;
-            color: #fff;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background .3s;
-        }
+           width: 100%;
+           margin-top: 1rem;
+           padding: .75rem;
+           border: none;
+           border-radius: .5rem;
+           background: #ff69b4; /* 粉色 */
+           color: #fff;
+           font-size: 1rem;
+           cursor: pointer;
+           transition: background .3s;
+       }
+
+       button:hover {
+          background: #ff1493; /* 深粉色 */
+      }
 
         button:hover {
-            background: #ff1493;
-        }
-
-        button:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            opacity: 0.7;
+            background: var(--color-primary-dark);
         }
 
         .success, .error {
@@ -119,21 +119,20 @@
 </head>
 <body>
 
-<header><h1>短链生成器</h1></header>
-<main x-data="app">
-    <input placeholder="输入要缩短的网址..." x-model="url">
-    <button :disabled="loading || isValidated()" @click="submit()">生成短链</button>
-    <div x-show="alert" :class="alert?.type" x-text="alert?.message"></div>
-</main>
+    <header><h1>短链生成器</h1></header>
+    <main x-data="app">
+        <input placeholder="输入要缩短的网址..." x-model="url">
+        <button :disabled="loading || isValidated()" @click="submit()">生成短链</button>
+        <p x-show="alert" :class="alert?.type" x-text="alert?.message"></p>
+    </main>
 
-<footer>
-    基于 <a href="https://blog.zxlwq.dpdns.org/" target="_blank">科技-刘</a> 的短链生成器
-</footer>
+    <footer>
+        基于 <a href="https://blog.zxlwq.dpdns.org/" target="_blank">科技-刘</a> 的短链生成器
+    </footer>
 
-<script src="asset/js/alpine.js"></script>
-<script>
-    document.addEventListener('alpine:init', () => {
-        Alpine.data('app', () => ({
+    <script src="asset/js/alpine.js"></script>
+    <script>
+        const app = {
             url: '',
             alert: null,
             loading: false,
@@ -169,7 +168,7 @@
                     } else {
                         this.url = res.link;
                         this.alert = { type: 'success', message: `短链生成成功：${res.link}` };
-                        this.copyToClipboard(res.link);
+                        this.copyToClipboard(res.link); // 自动复制到剪贴板
                     }
                 })
                 .catch(err => {
@@ -177,9 +176,8 @@
                     this.loading = false;
                 });
             }
-        }));
-    });
-</script>
+        };
+    </script>
 
 </body>
 </html>
