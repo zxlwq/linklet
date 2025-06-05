@@ -13,10 +13,9 @@
             --body-color: #ffffff;
             --border-color: #dee2e6;
         }
-
-        /* 设置背景图片 */
+  /* 设置背景图片 */
         body {
-            background: url('https://jpg.zxlwq.dpdns.org/blog/13.webp') no-repeat center center fixed;
+            background: url('asset/img/favicon.jpg') no-repeat center center fixed;
             background-size: cover;
             font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             line-height: 1.5;
@@ -33,7 +32,6 @@
             position: relative;
         }
 
-        /* 半透明遮罩层 */
         body::before {
             content: "";
             position: fixed;
@@ -41,7 +39,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.3); /* 30% 透明度 */
+            background: rgba(0, 0, 0, 0.3);
             z-index: -1;
         }
 
@@ -73,25 +71,26 @@
         }
 
         button {
-           width: 100%;
-           margin-top: 1rem;
-           padding: .75rem;
-           border: none;
-           border-radius: .5rem;
-           background: #ff69b4; /* 粉色 */
-           color: #fff;
-          font-size: 1rem;
-          cursor: pointer;
-          transition: background .3s;
-       }
-
-       button:hover {
-          background: #ff1493; /* 深粉色 */
-      }
-
+            width: 100%;
+            margin-top: 1rem;
+            padding: .75rem;
+            border: none;
+            border-radius: .5rem;
+            background: #ff69b4;
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background .3s;
+        }
 
         button:hover {
-            background: var(--color-primary-dark);
+            background: #ff1493;
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            opacity: 0.7;
         }
 
         .success, .error {
@@ -120,20 +119,21 @@
 </head>
 <body>
 
-    <header><h1>短链生成器</h1></header>
-    <main x-data="app">
-        <input placeholder="输入要缩短的网址..." x-model="url">
-        <button :disabled="loading || isValidated()" @click="submit()">生成短链</button>
-        <p x-show="alert" :class="alert?.type" x-text="alert?.message"></p>
-    </main>
+<header><h1>短链生成器</h1></header>
+<main x-data="app">
+    <input placeholder="输入要缩短的网址..." x-model="url">
+    <button :disabled="loading || isValidated()" @click="submit()">生成短链</button>
+    <div x-show="alert" :class="alert?.type" x-text="alert?.message"></div>
+</main>
 
-    <footer>
-        基于 <a href="https://blog.zxlwq.dpdns.org/" target="_blank">科技-刘</a> 的短链生成器
-    </footer>
+<footer>
+    基于 <a href="https://blog.zxlwq.dpdns.org/" target="_blank">科技-刘</a> 的短链生成器
+</footer>
 
-    <script src="asset/js/alpine.js"></script>
-    <script>
-        const app = {
+<script src="asset/js/alpine.js"></script>
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('app', () => ({
             url: '',
             alert: null,
             loading: false,
@@ -169,7 +169,7 @@
                     } else {
                         this.url = res.link;
                         this.alert = { type: 'success', message: `短链生成成功：${res.link}` };
-                        this.copyToClipboard(res.link); // 自动复制到剪贴板
+                        this.copyToClipboard(res.link);
                     }
                 })
                 .catch(err => {
@@ -177,8 +177,9 @@
                     this.loading = false;
                 });
             }
-        };
-    </script>
+        }));
+    });
+</script>
 
 </body>
 </html>
